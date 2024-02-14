@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictFunctionTypes": true,
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2022",
+    "jsx": "react-jsx",
+
+    // This setting should really be true in order for the compiled TS output to
+    // follow the Javascript specs (and it defaults to true in TS projects
+    // targeting newer Javascript versions) but we can't make it true, because
+    // typeorm, and possibly nestjs (and/or class-validator), rely on the old,
+    // non-standard behavior. See https://github.com/typeorm/typeorm/issues/9118
+    "useDefineForClassFields": false,
+
+    // This ignores event listeners
+    "noUnusedLocals": false,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "inlineSources": true
+  }
+}
