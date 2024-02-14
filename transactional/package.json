@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "email dev",
-    "preview:build": "email build"
+    "preview:build": "email build",
+    "build": "rimraf dist && tsc"
+  },
+  "exports": {
+    "./emails/*": {
+      "types": "./dist/*.d.ts",
+      "require": "./dist/*.js"
+    }
   },
   "license": "MIT",
   "dependencies": {
@@ -12,6 +19,7 @@
     "react-email": "^2.1.0-canary.1"
   },
   "devDependencies": {
-    "@types/react": "18.2.55"
+    "@types/react": "18.2.55",
+    "rimraf": "5.0.5"
   }
 }

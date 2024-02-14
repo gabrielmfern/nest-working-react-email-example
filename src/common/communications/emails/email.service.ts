@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as React from 'react';
-import { VercelInviteUserEmail } from '../../../../transactional/emails/vercel-invite-user';
+import { VercelInviteUserEmail } from 'transactional/emails/vercel-invite-user';
 import { renderAsync } from '@react-email/render';
 
 @Injectable()
