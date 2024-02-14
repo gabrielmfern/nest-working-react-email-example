@@ -1,4 +1,42 @@
+## How to run it
+
+1. Run `pnpm install` on the root
+2. Run `pnpm install` inside of `./transactional`
+3. Run `pnpm build` inside of `./transactional`
+    - You will need to build everytime you make changes to the emails, so it might be good to watch for changes
+4. Run `pnpm start:dev`
+
+## How it works
+
+This does not use a workspace, so to avoid duplicated dependencies this adds `transactional` 
+as a dependency which will bring in its dependencies as well. This means that if you want
+to import from `transactional` you treat it as a dependency.
+It would be a better developer experience if these were in a monorepo though.
+
 ## Changes worth noting
+
+Inside of `./src/common/communications/emails/email.service.ts`
+
+```diff
+import { Injectable } from '@nestjs/common';
+import * as React from 'react';
++import { VercelInviteUserEmail } from 'transactional/emails/vercel-invite-user';
+import { renderAsync } from '@react-email/render';
+
+@Injectable()
+export class EmailService {
+  constructor() {}
+
+  renderVercelInviteUser() {
+    return renderAsync(
+      React.createElement(
+        VercelInviteUserEmail,
+        VercelInviteUserEmail.PreviewProps,
+      ),
+    );
+  }
+}
+```
 
 inside of `package.json`
 
@@ -7,8 +45,9 @@ inside of `package.json`
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
-    "@react-email/render": "^0.0.12",
++    "@react-email/render": "^0.0.12",
 +    "react": "18.2.0",
++    "transactional": "./transactional",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
@@ -85,8 +124,8 @@ in the transactional's `tsconfig.json`
 +  "extends": "../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "outDir": "dist",
-    "declaration": true
++    "outDir": "dist",
++    "declaration": true
   },
   "include": [
     "**/*.ts",
@@ -95,6 +134,36 @@ in the transactional's `tsconfig.json`
   "exclude": [
     "node_modules"
   ]
+}
+```
+
+In the transactional's `package.json`
+
+```diff
+{
+  "name": "transactional",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "email dev",
+    "preview:build": "email build",
++    "build": "rimraf dist && tsc"
+  },
++  "exports": {
++    "./emails/*": {
++      "types": "./dist/*.d.ts",
++      "require": "./dist/*.js"
++    }
++  },
+  "license": "MIT",
+  "dependencies": {
+    "@react-email/components": "^0.0.15-canary.1",
+    "react": "18.2.0",
+    "react-email": "^2.1.0-canary.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.55",
+    "rimraf": "5.0.5"
+  }
 }
 ```
 
